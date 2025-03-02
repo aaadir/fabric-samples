@@ -94,8 +94,6 @@ type IssueCashView struct {
 }
 
 func (v *IssueCashView) Call(context view.Context) (interface{}, error) {
-	logger.Infof("IssueCashView: requesting [%s] identity from [%s]", v.Recipient, v.RecipientNode)
-
 	// Is the wallet on our node?
 	// tms := token.GetManagementService(context)
 	// if w := tms.WalletManager().OwnerWalletByIdentity(view.Identity(v.Recipient)); w != nil {
@@ -203,7 +201,7 @@ type IssueHistoryView struct {
 }
 
 func (v *IssueHistoryView) Call(context view.Context) (interface{}, error) {
-	logger.Infof("IssueHistoryView: binding [%s] to node [%s]", v.Recipient, v.RecipientNode)
+	logger.Infof("IssueHistoryView: Call")
 
 	// Is the wallet on our node?
 	// tms := token.GetManagementService(context)
