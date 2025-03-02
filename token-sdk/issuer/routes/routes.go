@@ -47,3 +47,34 @@ func (c Controller) Issue(ctx context.Context, request IssueRequestObject) (Issu
 		},
 	}, nil
 }
+
+// Print issuing history
+// (POST /history)
+func (c Controller) History(ctx context.Context, request HistoryRequestObject) (HistoryResponseObject, error) {
+	code := request.Body.Amount.Code
+	value := uint64(request.Body.Amount.Value)
+	recipient := request.Body.Counterparty.Account
+	recipientNode := request.Body.Counterparty.Node
+	var message string
+	if request.Body.Message != nil {
+		message = *request.Body.Message
+	}
+
+	txID, err := c.Service.History(code, value, recipient, recipientNode, message)
+	if err != nil {
+		return HistorydefaultJSONResponse{
+			Body: Error{
+				Message: "can't get issuing history",
+				Payload: err.Error(),
+			},
+			StatusCode: 500,
+		}, nil
+	}
+
+	return History200JSONResponse{
+		HistorySuccessJSONResponse: HistorySuccessJSONResponse{
+			Message: fmt.Sprintf("History: issued %d %s to %s on %s", value, code, recipient, recipientNode),
+			Payload: txID,
+		},
+	}, nil
+}

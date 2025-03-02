@@ -82,6 +82,29 @@ paths:
       operationId: issue
       summary: Issue tokens of any kind to an account
 
+  /issuer/history:
+    servers:
+      - url: http://localhost:9100/api/v1/
+        description: issuer
+    summary: Get issuing history
+    post:
+      tags:
+        - issuer
+      responses:
+        "200":
+          $ref: "#/components/responses/IssueSuccess"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+      requestBody:
+        description: Instructions to print issuing history
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferRequest"
+      operationId: history
+      summary: Print Issuing history
+
   # Owner
   /owner/accounts:
     servers:
