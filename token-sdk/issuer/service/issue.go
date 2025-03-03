@@ -211,12 +211,18 @@ func (v *IssueHistoryView) Call(context view.Context) (interface{}, error) {
 	}
 	logger.Infof("loaded issuer wallet")
 
-	issuedTokens, err := w.ListIssuedTokens(ttx.WithType("EURX"))
+	issuedTokens, err := w.ListIssuedTokens(ttx.WithType(""))
 	logger.Infof("Listed issued tokens")
 	if err != nil {
-		logger.Infof("number of issued tokens = %d", len(issuedTokens.Tokens))
-	} else {
 		return "", errors.Errorf("can't list issued tokens")
+	}
+	logger.Infof("number of issued tokens = %d", len(issuedTokens.Tokens))
+	for _, token := range issuedTokens.Tokens {
+		// val, err := strconv.ParseInt(token.Quantity, 0, 64)
+		if err != nil {
+			return "", errors.Wrap(err, "Error parsing token "+token.Id.String())
+		}
+		logger.Infof("token = %+v", token)
 	}
 	return "", nil
 }
