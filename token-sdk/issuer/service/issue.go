@@ -205,10 +205,18 @@ func (v *IssueHistoryView) Call(context view.Context) (interface{}, error) {
 
 	// Get issuer wallet
 	logger.Infof("loading issuer wallet")
-	wallet := ttx.MyIssuerWallet(context)
-	if wallet == nil {
+	w := ttx.MyIssuerWallet(context)
+	if w == nil {
 		return "", errors.Errorf("issuer wallet not found")
 	}
 	logger.Infof("loaded issuer wallet")
+
+	issuedTokens, err := w.ListIssuedTokens(ttx.WithType("EURX"))
+	logger.Infof("Listed issued tokens")
+	if err != nil {
+		logger.Infof("number of issued tokens = %d", len(issuedTokens.Tokens))
+	} else {
+		return "", errors.Errorf("can't list issued tokens")
+	}
 	return "", nil
 }
